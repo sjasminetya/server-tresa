@@ -1,13 +1,10 @@
 const mongoose = require("mongoose");
 const bankSchema = new mongoose.Schema({
-    bank: {
+    nameBank: {
         type: String,
         required: true
     },
-    imageUrl: {
-        type: String
-    },
-    rekening: {
+    nomorRekening: {
         type: String,
         required: true
     },

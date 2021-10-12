@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema
-const propertySchema = new mongoose.Schema({
-    name: {
+const itemSchema = new mongoose.Schema({
+    title: {
         type: String,
         required: true
     },
@@ -38,4 +38,4 @@ const propertySchema = new mongoose.Schema({
     }]
 })
 
-module.exports = mongoose.model("Property", propertySchema)
+module.exports = mongoose.model("Item", itemSchema)

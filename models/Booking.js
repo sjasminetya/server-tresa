@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema
 const bookingSchema = new mongoose.Schema({
-    startDate: {
+    bookingStartDate: {
         type: Date,
         required: true
     },
-    endDate: {
+    bookingEndDate: {
         type: Date,
         required: true
     },
@@ -13,7 +13,7 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    bank: {
+    bankFrom: {
         type: String,
         required: true
     },
@@ -21,10 +21,10 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    propertyId: [{
+    itemId: [{
         _id: {
             type: ObjectId,
-            ref: "Property",
+            ref: "Item",
             required: true
         },
         price: {

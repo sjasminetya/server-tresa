@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -14,6 +14,7 @@ mongoose.connect('mongodb://localhost:27017/db_tresa', {
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+
 // router admin
 const adminRouter = require('./routes/admin');
 
