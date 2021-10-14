@@ -15,6 +15,7 @@
 
                         <!-- Begin Page Content -->
                         <div class="container-fluid">
+                            <%- include('../../partials/message.ejs') %>
 
                             <!-- Page Heading -->
                             <h1 class="h3 mb-4 text-gray-800">List Category</h1>
@@ -62,5 +63,17 @@
     </div>
 
     <%- include('./add_category.ejs') %>
+    <%- include('./edit_category.ejs') %>
 
     <%- include('../../partials/js.ejs') %>
+
+<script>
+    $('#dataTable').on('click', '.button-update', function(){
+        let id = $(this).data('id');
+        let name = $(this).data('name');
+        console.log(id, name)
+        $('#edit-category').modal('show');
+        $('.id').val(id);
+        $('.name').val(name);
+    })
+</script>
