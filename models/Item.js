@@ -22,7 +22,12 @@ const itemSchema = new mongoose.Schema({
         required: true
     },
     isPopular: {
-        type: Boolean
+        type: Boolean,
+        default: false
+    },
+    categoryId: {
+        type: ObjectId,
+        ref: "Category"
     },
     imageId: [{
         type: ObjectId,
@@ -35,7 +40,7 @@ const itemSchema = new mongoose.Schema({
     activityId: [{
         type: ObjectId,
         ref: "Activity"
-    }]
+    }],
 })
 
 module.exports = mongoose.model("Item", itemSchema)
