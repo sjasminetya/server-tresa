@@ -24,11 +24,18 @@ router.post('/add-item', uploadMultiple, adminController.addItem);
 router.put('/edit-item/:id', uploadMultiple, adminController.editItem);
 router.delete('/delete-item/:id', adminController.deleteItem);
 
-// endpoint feature
+// endpoint item detail
 router.get('/item/show-detail-item/:itemId', adminController.viewDetailItem);
+
+// endpoint feature
 router.post('/add-feature', uploadSingle, adminController.addFeature);
 router.put('/edit-feature', uploadSingle, adminController.editFeature);
 router.delete('/delete-feature/:itemId/:id', adminController.deleteFeature);
+
+// endpoint activity
+router.post('/add-activity', uploadSingle, adminController.addActivity);
+router.put('/edit-activity', uploadSingle, adminController.editActivity);
+router.delete('/delete-activity/:itemId/:id', adminController.deleteActivity);
 
 // endpoint booking
 router.get('/booking', adminController.viewBooking);

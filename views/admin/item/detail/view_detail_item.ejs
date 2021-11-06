@@ -75,6 +75,7 @@
   </div>
 
   <%- include('./show_edit_feature.ejs') %>
+  <%- include('./show_edit_activity.ejs') %>
     <%- include('../../../partials/js.ejs') %>
       <script>
         $(document).ready(function () {
@@ -90,5 +91,15 @@
           $('.id').val(id);
           $('.name').val(name);
           $('.qty').val(qty);
+        })
+
+        $('#dataTableActivity').on('click', '.button-update-activity', function () {
+          let id = $(this).data('id');
+          let name = $(this).data('name');
+          let type = $(this).data('type');
+          $('#edit-activity').modal('show');
+          $('.id').val(id);
+          $('.name').val(name);
+          $('.type').val(type);
         })
       </script>
