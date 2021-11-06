@@ -4,12 +4,69 @@ const itemModel = require('../models/Item');
 const ImageModel = require('../models/Image');
 const featureModel = require('../models/Feature');
 const activityModel = require('../models/Activity');
+const userModel = require('../models/Users');
 const fs = require('fs-extra');
 const path = require('path');
+const bycript = require('bcryptjs');
 
 module.exports = {
+  viewLogin: async (req, res) => {
+    try {
+      const alertMessage = req.flash('alertMessage');
+      const alertStatus = req.flash('alertStatus');
+      const alert = {
+        message: alertMessage,
+        status: alertStatus
+      };
+      if (req.session.user === null || req.session.user === undefined) {
+        res.render('index', { alert, title: 'Tresa | Login' });
+      } else {
+        res.redirect("/admin/dashboard")
+      }
+    } catch (error) {
+      req.flash('alertMessage', `${error.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect('/admin/login');
+    }
+  },
+  actionLogin: async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      const user = await userModel.findOne({ username });
+      if (!user) {
+        req.flash('alertMessage', 'Username not found');
+        req.flash('alertStatus', 'danger');
+        res.redirect('/admin/login');
+      }
+      const isPasswordMatch = await bycript.compare(password, user.password)
+      if (!isPasswordMatch) {
+        req.flash('alertMessage', 'Password not match');
+        req.flash('alertStatus', 'danger');
+        res.redirect('/admin/login');
+      }
+      req.session.user = {
+        id: user.id,
+        username: user.username
+      }
+      res.redirect('/admin/dashboard');
+    } catch (error) {
+      req.flash('alertMessage', `${error.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect('/admin/login');
+    }
+  },
+  actionLogout: (req, res) => {
+    req.session.destroy();
+    res.redirect("/admin/login")
+  },
   viewDashboard: (req, res) => {
-    res.render('admin/dashboard/view_dashboard', { title: 'Tresa | Dashboard' });
+    try {
+      res.render('admin/dashboard/view_dashboard', { title: 'Tresa | Dashboard', user: req.session.user });
+    } catch (error) {
+      req.flash('alertMessage', `${error.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect('/admin/dashboard/view_dashboard');
+    }
   },
   viewCategory: async (req, res) => {
     try {
@@ -20,7 +77,7 @@ module.exports = {
         message: alertMessage,
         status: alertStatus
       };
-      res.render('admin/category/view_category', { category, alert, title: 'Tresa | Category' });
+      res.render('admin/category/view_category', { category, alert, title: 'Tresa | Category', user: req.session.user });
     } catch (error) {
       req.flash('alertMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
@@ -78,7 +135,7 @@ module.exports = {
         message: alertMessage,
         status: alertStatus
       };
-      res.render('admin/bank/view_bank', { bank, alert, title: 'Tresa | Bank' });
+      res.render('admin/bank/view_bank', { bank, alert, title: 'Tresa | Bank', user: req.session.user });
     } catch (error) {
       req.flash('alertMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
@@ -154,7 +211,7 @@ module.exports = {
         message: alertMessage,
         status: alertStatus
       };
-      res.render('admin/item/view_item', { title: 'Tresa | Item', category, alert, item, action: 'view' });
+      res.render('admin/item/view_item', { title: 'Tresa | Item', category, alert, item, action: 'view', user: req.session.user });
     } catch (error) {
       req.flash('alertMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
@@ -203,7 +260,7 @@ module.exports = {
         message: alertMessage,
         status: alertStatus
       };
-      res.render('admin/item/view_item', { title: 'Tresa | Show Image Item', alert, item, action: 'show image' });
+      res.render('admin/item/view_item', { title: 'Tresa | Show Image Item', alert, item, action: 'show image', user: req.session.user });
     } catch (error) {
       req.flash('alertMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
@@ -223,7 +280,7 @@ module.exports = {
         message: alertMessage,
         status: alertStatus
       };
-      res.render('admin/item/view_item', { title: 'Tresa | Edit Item', alert, item, action: 'edit', category });
+      res.render('admin/item/view_item', { title: 'Tresa | Edit Item', alert, item, action: 'edit', category, user: req.session.user });
     } catch (error) {
       req.flash('alertMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
@@ -307,7 +364,7 @@ module.exports = {
       };
       const feature = await featureModel.find({ itemId });
       const activity = await activityModel.find({ itemId });
-      res.render('admin/item/detail/view_detail_item', { title: 'Tresa | Detail Item', alert, itemId, feature, activity });
+      res.render('admin/item/detail/view_detail_item', { title: 'Tresa | Detail Item', alert, itemId, feature, activity, user: req.session.user });
     } catch (error) {
       req.flash('alertMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
@@ -459,6 +516,6 @@ module.exports = {
     }
   },
   viewBooking: (req, res) => {
-    res.render('admin/booking/view_booking', { title: 'Tresa | Booking' });
+    res.render('admin/booking/view_booking', { title: 'Tresa | Booking', user: req.session.user });
   }
 }
