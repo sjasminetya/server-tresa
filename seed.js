@@ -12,11 +12,12 @@ seeder.connect('mongodb://127.0.0.1:27017/db_tresa', {
   // Load Mongoose models
   seeder.loadModels([
     './models/Member',
-    './models/Users'
+    './models/Users',
+    './models/Booking'
   ]);
 
   // Clear specified collections
-  seeder.clearModels(['Member', 'Users'], function () {
+  seeder.clearModels(['Member', 'Users', 'Booking'], function () {
 
     // Callback to populate DB once collections have been cleared
     seeder.populateModels(data, function () {
@@ -61,5 +62,31 @@ var data = [
         password: 'rahasia',
       },
     ]
-  }
+  },
+  {
+    'model': 'Booking',
+    'documents': [
+      {
+        _id: mongoose.Types.ObjectId('5e96cbe292b97300fc90cee1'),
+        bookingStartDate: '12-12-2020',
+        bookingEndDate: '12-12-2020',
+        invoice: 1231231,
+        itemId: {
+          _id: mongoose.Types.ObjectId('5e96cbe292b97300fc902222'),
+          title: 'Village Angga',
+          price: 6,
+          duration: 2,
+        },
+        total: 12,
+        memberId: mongoose.Types.ObjectId('5e96cbe292b97300fc903333'),
+        bankId: mongoose.Types.ObjectId('616be970daa83615b419f9a3'),
+        payments: {
+          proofPayment: 'images/buktibayar.jpeg',
+          bankFrom: 'BCA',
+          status: 'Proses',
+          accountHolder: 'ang'
+        }
+      }
+    ]
+  },
 ];
