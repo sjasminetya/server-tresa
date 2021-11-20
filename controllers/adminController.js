@@ -61,13 +61,16 @@ module.exports = {
     req.session.destroy();
     res.redirect("/admin/login")
   },
-  viewDashboard: (req, res) => {
+  viewDashboard: async (req, res) => {
     try {
-      res.render('admin/dashboard/view_dashboard', { title: 'Tresa | Dashboard', user: req.session.user });
+      const member = await memberModel.find();
+      const booking = await bookingModel.find();
+      const item = await itemModel.find();
+      res.render('admin/dashboard/view_dashboard', { title: 'Tresa | Dashboard', user: req.session.user, member, booking, item });
     } catch (error) {
       req.flash('alertMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
-      res.redirect('/admin/dashboard/view_dashboard');
+      res.redirect('/admin/dashboard');
     }
   },
   viewCategory: async (req, res) => {
