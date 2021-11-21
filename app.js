@@ -23,6 +23,9 @@ const usersRouter = require('./routes/users');
 // router admin
 const adminRouter = require('./routes/admin');
 
+// router api
+const apiRouter = require('./routes/api');
+
 const app = express();
 
 // view engine setup
@@ -47,6 +50,7 @@ app.use('/sb-admin-2', express.static(path.join(__dirname, 'node_modules/startbo
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
+app.use('/api/v1/member', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
