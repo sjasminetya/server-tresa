@@ -2,7 +2,8 @@ const ItemModel = require('../models/Item');
 const ActivityModel = require('../models/Activity');
 const BookingModel = require('../models/Booking');
 const CategoryModel = require('../models/Category');
-const Item = require('../models/Item');
+const BankModel = require('../models/Bank');
+const { reject, response } = require('../helpers/helpers');
 
 module.exports = {
   landingPage: async (req, res) => {
@@ -21,7 +22,7 @@ module.exports = {
       // is popular
       for (let i = 0; i < category.length; i++) {
         for (let x = 0; x < category[i].itemId.length; x++) {
-          const item = await Item.findOne({ _id: category[i].itemId[x]._id });
+          const item = await ItemModel.findOne({ _id: category[i].itemId[x]._id });
           item.isPopular = false;
           await item.save();
           if (category[i].itemId[0] === category[i].itemId[x]) {
@@ -42,7 +43,7 @@ module.exports = {
         familyOccupation: "Product Designer"
       }
 
-      res.status(200).json({
+      const result = {
         hero: {
           travelers: traveler.length,
           treasures: treasure.length,
@@ -51,10 +52,35 @@ module.exports = {
         mostPicked,
         category,
         testimonial
-      })
+      }
+
+      return response(res, result, 200, null)
     } catch (error) {
-      console.log(error)
-      res.status(500).json({ message: 'Internal server error' })
+      return reject(res, [], 404, { error: 'Internal server error' })
+    }
+  },
+  detailPage: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const item = await ItemModel.findOne({ _id: id }).populate({ path: 'imageId', select: '_id imageUrl' }).populate({ path: 'featureId', select: '_id name qty imageUrl' }).populate({ path: 'activityId', select: '_id name type imageUrl' });
+      const bank = await BankModel.find();
+      const testimonial = {
+        _id: "asd1293uasdads1",
+        imageUrl: "images/testimonial1.jpg",
+        name: "Happy Family",
+        rate: 4.55,
+        content: "What a great trip with my family and I should try again next time soon ...",
+        familyName: "Angga",
+        familyOccupation: "Product Designer"
+      }
+      const result = {
+        ...item._doc,
+        bank,
+        testimonial
+      }
+      return response(res, result, 200, null)
+    } catch (error) {
+      return reject(res, [], 404, { error: 'Internal server error' })
     }
   }
 }
