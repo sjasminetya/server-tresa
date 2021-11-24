@@ -3,6 +3,7 @@ const ActivityModel = require('../models/Activity');
 const BookingModel = require('../models/Booking');
 const CategoryModel = require('../models/Category');
 const BankModel = require('../models/Bank');
+const MemberModel = require('../models/Member');
 const { reject, response } = require('../helpers/helpers');
 
 module.exports = {
@@ -82,5 +83,72 @@ module.exports = {
     } catch (error) {
       return reject(res, [], 404, { error: 'Internal server error' })
     }
+  },
+  bookingPage: async (req, res) => {
+    const {
+      idItem,
+      duration,
+      bookingStartDate,
+      bookingEndDate,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      accountHolder,
+      bankFrom,
+    } = req.body;
+
+    if (!req.file) {
+      return reject(res, null, 404, { error: 'Image not found' })
+    }
+
+    if (idItem === undefined || duration === undefined || bookingStartDate === undefined || bookingEndDate === undefined || firstName === undefined || lastName === undefined || email === undefined || phoneNumber === undefined || accountHolder === undefined || bankFrom === undefined) {
+      return reject(res, null, 404, { error: 'Lengkapi semua field!' })
+    }
+
+    const item = await ItemModel.findOne({ _id: idItem });
+
+    if (!item) {
+      return reject(res, null, 404, { error: 'Item not found' })
+    }
+
+    item.sumBooking += 1;
+
+    await item.save();
+
+    let total = item.price * duration;
+    let tax = total * 0.10;
+
+    const invoice = Math.floor(1000000 + Math.random() * 9000000);
+
+    const member = await MemberModel.create({
+      firstName,
+      lastName,
+      email,
+      phoneNumber
+    });
+
+    const newBooking = {
+      invoice,
+      bookingStartDate,
+      bookingEndDate,
+      total: total += tax,
+      itemId: {
+        _id: item.id,
+        title: item.title,
+        price: item.price,
+        duration
+      },
+      memberId: member.id,
+      payments: {
+        proofPayment: `images/${req.file.filename}`,
+        bankFrom,
+        accountHolder
+      }
+    }
+
+    const booking = await BookingModel.create(newBooking);
+
+    return response(res, booking, 201, null)
   }
 }
