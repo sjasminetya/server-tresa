@@ -46,7 +46,7 @@
                       <%= feature[i].qty %>
                     </td>
                     <td>
-                      <img src="http://localhost:3000/<%= feature[i].imageUrl %>" alt="imageUrl" width="80px"
+                      <img src="<%= process.env.BASE_URL %>/<%= feature[i].imageUrl %>" alt="imageUrl" width="80px"
                         style="object-fit: cover;">
                     </td>
                     <td>
