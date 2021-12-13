@@ -8,11 +8,9 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
 
-console.log(`mongodb+srv://${process.env.USERNAME_DB}:${process.env.PASSWORD_DB}@cluster0.oove8.mongodb.net/db_tresa`)
-
 // import mongoose
 const mongoose = require('mongoose');
-mongoose.connect(`mongodb+srv://${process.env.USERNAME_DB}:${process.env.PASSWORD_DB}@cluster0.oove8.mongodb.net/db_tresa`, {
+mongoose.connect(`mongodb://${process.env.USERNAME_DB}:${process.env.PASSWORD_DB}@cluster0-shard-00-00.oove8.mongodb.net:27017,cluster0-shard-00-01.oove8.mongodb.net:27017,cluster0-shard-00-02.oove8.mongodb.net:27017/db_tresa?ssl=true&replicaSet=atlas-10xiqj-shard-0&authSource=admin&retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
