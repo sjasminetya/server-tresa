@@ -2,7 +2,7 @@ var seeder = require('mongoose-seed');
 var mongoose = require('mongoose');
 
 // Connect to MongoDB via Mongoose
-seeder.connect('mongodb://localhost:27017/db_tresa', {
+seeder.connect(`mongodb+srv://${process.env.USERNAME_DB}:${process.env.PASSWORD_DB}@cluster0.oove8.mongodb.net/db_tresa`, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: true,
