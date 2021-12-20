@@ -2,7 +2,7 @@ var seeder = require('mongoose-seed');
 var mongoose = require('mongoose');
 
 // Connect to MongoDB via Mongoose
-seeder.connect(`mongodb://sjasminetya:gf2FjLYYfCh2HXGP@cluster0-shard-00-00.oove8.mongodb.net:27017,cluster0-shard-00-01.oove8.mongodb.net:27017,cluster0-shard-00-02.oove8.mongodb.net:27017/db_tresa?ssl=true&replicaSet=atlas-10xiqj-shard-0&authSource=admin&retryWrites=true&w=majority`, {
+seeder.connect(`mongodb://${process.env.USERNAME_DB}:${process.env.PASSWORD_DB}@cluster0-shard-00-00.oove8.mongodb.net:27017,cluster0-shard-00-01.oove8.mongodb.net:27017,cluster0-shard-00-02.oove8.mongodb.net:27017/db_tresa?ssl=true&replicaSet=atlas-10xiqj-shard-0&authSource=admin&retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: true,
