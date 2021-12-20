@@ -150,7 +150,7 @@ module.exports = {
   addBank: async (req, res) => {
     try {
       const { name, nameBank, nomorRekening } = req.body;
-      await bankModel.create({ name, nameBank, nomorRekening, imageUrl: `images/${req.file.filename}` });
+      await bankModel.create({ name, nameBank, nomorRekening, imageUrl: `${process.env.BASE_URL}/images/${req.file.filename}` });
       req.flash('alertMessage', 'Success Add Bank');
       req.flash('alertStatus', 'success');
       res.redirect('/admin/bank');
@@ -177,7 +177,7 @@ module.exports = {
         bank.name = name;
         bank.nameBank = nameBank;
         bank.nomorRekening = nomorRekening;
-        bank.imageUrl = `images/${req.file.filename}`;
+        bank.imageUrl = `${process.env.BASE_URL}/images/${req.file.filename}`;
         await bank.save();
         req.flash('alertMessage', 'Success Edit Bank');
         req.flash('alertStatus', 'success');
@@ -240,7 +240,7 @@ module.exports = {
         console.log(req.files);
         await category.save();
         for (let i = 0; i < req.files.length; i++) {
-          const imageSave = await ImageModel.create({ imageUrl: `images/${req.files[i].filename}` });
+          const imageSave = await ImageModel.create({ imageUrl: `${process.env.BASE_URL}/images/${req.files[i].filename}` });
           item.imageId.push({ _id: imageSave._id });
           await item.save();
         }
@@ -303,7 +303,7 @@ module.exports = {
         for (let i = 0; i < item.imageId.length; i++) {
           const imageUpdate = await ImageModel.findOne({ _id: item.imageId[i]._id });
           await fs.unlink(path.join(`public/${imageUpdate.imageUrl}`));
-          imageUpdate.imageUrl = `images/${req.files[i].filename}`;
+          imageUpdate.imageUrl = `${process.env.BASE_URL}/images/${req.files[i].filename}`;
           await imageUpdate.save();
         }
         item.title = title;
@@ -384,7 +384,7 @@ module.exports = {
         req.flash('alertStatus', 'danger');
         res.redirect(`/admin/item/show-detail-item/${itemId}`);
       }
-      const feature = await featureModel.create({ name, qty, itemId, imageUrl: `images/${req.file.filename}` });
+      const feature = await featureModel.create({ name, qty, itemId, imageUrl: `${process.env.BASE_URL}/images/${req.file.filename}` });
 
       const item = await itemModel.findOne({ _id: itemId });
       item.featureId.push({ _id: feature._id });
@@ -414,7 +414,7 @@ module.exports = {
         await fs.unlink(path.join(`public/${feature.imageUrl}`));
         feature.name = name;
         feature.qty = qty;
-        feature.imageUrl = `images/${req.file.filename}`;
+        feature.imageUrl = `${process.env.BASE_URL}/images/${req.file.filename}`;
         await feature.save();
         req.flash('alertMessage', 'Success Edit Feature');
         req.flash('alertStatus', 'success');
@@ -456,7 +456,7 @@ module.exports = {
         req.flash('alertStatus', 'danger');
         res.redirect(`/admin/item/show-detail-item/${itemId}`);
       }
-      const activity = await activityModel.create({ name, type, itemId, imageUrl: `images/${req.file.filename}`, isPopular: false });
+      const activity = await activityModel.create({ name, type, itemId, imageUrl: `${process.env.BASE_URL}/images/${req.file.filename}`, isPopular: false });
 
       const item = await itemModel.findOne({ _id: itemId });
       item.activityId.push({ _id: activity._id });
@@ -486,7 +486,7 @@ module.exports = {
         await fs.unlink(path.join(`public/${activity.imageUrl}`));
         activity.name = name;
         activity.type = type;
-        activity.imageUrl = `images/${req.file.filename}`;
+        activity.imageUrl = `${process.env.BASE_URL}/images/${req.file.filename}`;
         await activity.save();
         req.flash('alertMessage', 'Success Edit Activity');
         req.flash('alertStatus', 'success');
